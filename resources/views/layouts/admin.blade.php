@@ -154,47 +154,48 @@
 
         </nav>
 
-        <!-- Bottom -->
-        <div class="space-y-5">
+<!-- Bottom -->
+<div class="space-y-5">
 
-            <!-- Mini Card -->
-            <div class="bg-white/10 border border-white/10 rounded-3xl p-5 backdrop-blur-md">
+    <!-- Mini Card -->
+    <div class="bg-white/10 border border-white/10 rounded-3xl p-5 backdrop-blur-md">
 
-                <p class="text-sm text-indigo-200 mb-2">
+        <p class="text-sm text-indigo-200 mb-2">
+            Total Event Aktif
+        </p>
 
-                    Total Event Aktif
+        <h3 class="text-3xl font-black text-white">
+            8 Event
+        </h3>
 
-                </p>
+    </div>
 
-                <h3 class="text-3xl font-black text-white">
+    <!-- Logout -->
+    <div class="pt-5 border-t border-indigo-700">
 
-                    8 Event
+        <form action="{{ route('admin.logout') }}" method="POST">
 
-                </h3>
+            @csrf
 
-            </div>
+            <button
+                type="submit"
+                class="w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-indigo-200 hover:bg-red-500 hover:text-white transition-all duration-300 font-bold">
 
-            <!-- Logout -->
-            <div class="pt-5 border-t border-indigo-700">
+                <div class="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center">
+                    🚪
+                </div>
 
-                <a href="/"
-                   class="flex items-center gap-4 px-5 py-4 rounded-2xl text-indigo-200 hover:bg-red-500 hover:text-white transition-all duration-300 font-bold">
+                <span>Keluar</span>
 
-                    <div class="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center">
+            </button>
 
-                        🚪
+        </form>
 
-                    </div>
+    </div>
 
-                    Keluar
+</div>
 
-                </a>
-
-            </div>
-
-        </div>
-
-    </aside>
+</aside>
 
     <!-- ========================= -->
     <!-- MAIN CONTENT -->

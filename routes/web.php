@@ -7,8 +7,8 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\PartnerController;
 
+use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\AdminEventController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\AdminTransactionsController;
 use App\Http\Controllers\Admin\EventController as AdminEventResourceController;
@@ -27,52 +27,55 @@ Route::get('/checkout', [EventController::class, 'checkout']);
 
 Route::get('/ticket', [TicketController::class, 'index']);
 
-
 /*
 |--------------------------------------------------------------------------
-| Partner Routes (CRUD)
+| Partner Routes
 |--------------------------------------------------------------------------
 */
 
-// Read Data
 Route::get('/admin/partners', [PartnerController::class, 'index']);
-
-// Form Create
 Route::get('/admin/partners/create', [PartnerController::class, 'create']);
-
-// Simpan Data
 Route::post('/admin/partners/store', [PartnerController::class, 'store']);
-
-// Form Edit
 Route::get('/admin/partners/{id}/edit', [PartnerController::class, 'edit']);
-
-// Update Data
 Route::put('/admin/partners/{id}', [PartnerController::class, 'update']);
-
-// Delete Data
 Route::delete('/admin/partners/{id}', [PartnerController::class, 'destroy']);
-
 
 /*
 |--------------------------------------------------------------------------
-| Admin Routes
+| Authentication Routes
 |--------------------------------------------------------------------------
 */
 
 Route::prefix('admin')->name('admin.')->group(function () {
 
-    // Dashboard
-    Route::get('/dashboard', [DashboardController::class, 'index'])
-        ->name('dashboard');
+    Route::get('/login', [AuthController::class, 'showLogin'])
+        ->name('login');
 
-    // Events CRUD
-    Route::resource('events', AdminEventResourceController::class);
+    Route::post('/login', [AuthController::class, 'login'])
+        ->name('login.post');
 
-    // Categories CRUD
-    Route::resource('categories', CategoryController::class);
+    Route::post('/logout', [AuthController::class, 'logout'])
+        ->name('logout');
+});
 
-    // Transactions
-    Route::get('/transactions', [AdminTransactionsController::class, 'index'])
-        ->name('transactions.index');
+/*
+|--------------------------------------------------------------------------
+| Protected Admin Routes
+|--------------------------------------------------------------------------
+*/
 
+Route::prefix('admin')
+    ->name('admin.')
+    ->middleware('auth')
+    ->group(function () {
+
+        Route::get('/dashboard', [DashboardController::class, 'index'])
+            ->name('dashboard');
+
+        Route::resource('events', AdminEventResourceController::class);
+
+        Route::resource('categories', CategoryController::class);
+
+        Route::get('/transactions', [AdminTransactionsController::class, 'index'])
+            ->name('transactions.index');
 });

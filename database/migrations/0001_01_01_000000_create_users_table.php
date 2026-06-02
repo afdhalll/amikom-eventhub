@@ -11,33 +11,53 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // 1. Tabel Users
+        // Tabel Users
         Schema::create('users', function (Blueprint $table) {
+
             $table->id();
+
             $table->string('name');
+
             $table->string('email')->unique();
+
             $table->timestamp('email_verified_at')->nullable();
+
             $table->string('password');
-            $table->string('role')->default('user'); // kolom role ditambahkan
+
+            $table->enum('role', ['admin', 'user'])->default('user');
+
             $table->rememberToken();
+
             $table->timestamps();
+
         });
 
-        // 2. Tabel Password Resets (mengikuti standar Laravel)
+        // Tabel Password Reset
         Schema::create('password_resets', function (Blueprint $table) {
+
             $table->string('email')->index();
+
             $table->string('token');
+
             $table->timestamp('created_at')->nullable();
+
         });
 
-        // 3. Tabel Sessions
+        // Tabel Sessions
         Schema::create('sessions', function (Blueprint $table) {
+
             $table->string('id')->primary();
+
             $table->foreignId('user_id')->nullable()->index();
+
             $table->string('ip_address', 45)->nullable();
+
             $table->text('user_agent')->nullable();
+
             $table->longText('payload');
+
             $table->integer('last_activity')->index();
+
         });
     }
 
@@ -47,7 +67,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('sessions');
+
         Schema::dropIfExists('password_resets');
+
         Schema::dropIfExists('users');
     }
 };

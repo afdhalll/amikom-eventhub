@@ -11,15 +11,17 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. Akun Admin Utama
-        User::create([
-            'name' => 'Admin Amikom',
-            'email' => 'admin@amikom.ac.id',
-            'password' => bcrypt('password'),
-            'role' => 'admin',
-        ]);
+        // Admin Default
+        User::firstOrCreate(
+            ['email' => 'admin@amikom.ac.id'],
+            [
+                'name' => 'Admin Amikom',
+                'password' => bcrypt('password'),
+                'role' => 'admin',
+            ]
+        );
 
-        // 2. Insert Kategori Event
+        // Kategori
         $categoryIT = Category::firstOrCreate([
             'name' => 'Seminar IT',
             'slug' => 'seminar-it',
@@ -30,7 +32,7 @@ class DatabaseSeeder extends Seeder
             'slug' => 'entertainment',
         ]);
 
-        // 3. Insert Sampel Events
+        // Event 1
         Event::create([
             'category_id' => $categoryEntertainment->id,
             'title' => 'Jazz Night 2025',
@@ -42,6 +44,7 @@ class DatabaseSeeder extends Seeder
             'poster_path' => 'posters/event-1.png',
         ]);
 
+        // Event 2
         Event::create([
             'category_id' => $categoryIT->id,
             'title' => 'AI Summit & Expo 2026',
