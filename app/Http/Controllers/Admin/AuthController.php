@@ -24,6 +24,16 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
 
+            // Cek apakah role admin
+            if (Auth::user()->role !== 'admin') {
+
+                Auth::logout();
+
+                return back()->withErrors([
+                    'email' => 'Akses ditolak. Hanya admin yang dapat login.',
+                ]);
+            }
+
             $request->session()->regenerate();
 
             return redirect()->route('admin.dashboard');
