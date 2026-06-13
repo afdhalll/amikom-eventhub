@@ -86,8 +86,8 @@
         {{-- Poster --}}
         <div class="mb-6">
             <label class="block mb-2 font-medium text-gray-700">Poster Event</label>
-            <input type="file" name="poster_path"
-                class="w-full border border-gray-300 p-2.5 rounded">
+            <input type="file" name="poster"
+       class="w-full border border-gray-300 p-2.5 rounded">
         </div>
 
         {{-- Submit --}}

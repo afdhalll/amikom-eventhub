@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Event;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class EventController extends Controller
 {
-    // Halaman detail event
-    public function show()
+    // Detail event dinamis
+    public function show(Event $event)
     {
-        return view('event-detail');
+        $categories = Category::all();
+
+        return view('event-detail', compact('categories', 'event'));
     }
 
     // Halaman checkout

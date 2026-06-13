@@ -21,8 +21,8 @@ use App\Http\Controllers\Admin\EventController as AdminEventResourceController;
 
 Route::get('/', [HomeController::class, 'index']);
 
-Route::get('/event-detail', [EventController::class, 'show']);
-
+Route::get('/events/{event}', [EventController::class, 'show'])
+    ->name('events.show');
 Route::get('/checkout', [EventController::class, 'checkout']);
 
 Route::get('/ticket', [TicketController::class, 'index']);

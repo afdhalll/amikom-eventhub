@@ -1,3 +1,7 @@
+@php
+use Illuminate\Support\Facades\Storage;
+@endphp
+
 @extends('layouts.app')
 
 @section('content')
@@ -282,8 +286,11 @@
 
                 <div class="relative aspect-[3/4]">
 
-                    <img src="{{ $event->image ? asset('storage/'.$event->image) : 'https://placehold.co/600x800' }}"
-                         class="w-full h-full object-cover">
+                    <img src="{{ ($event->poster_path && Storage::disk('public')->exists($event->poster_path))
+                    ? asset('storage/' . $event->poster_path)
+                    : 'https://placehold.co/600x800' }}"
+                    alt="{{ $event->title }}"
+                    class="w-full h-full object-cover">
 
                     <div class="absolute top-4 left-4 bg-white px-3 py-1 text-xs font-bold text-indigo-600 rounded">
 
@@ -315,11 +322,9 @@
 
                         </span>
 
-                        <a href="{{ url('event/'.$event->id) }}"
-                           class="text-indigo-600 font-semibold">
-
-                            Detail
-
+                        <a href="{{ route('events.show', $event->id) }}"
+                        class="px-5 py-2 bg-indigo-50 text-indigo-600 rounded-xl font-bold hover:bg-indigo-600 hover:text-white transition">
+                         Lihat Detail
                         </a>
 
                     </div>
