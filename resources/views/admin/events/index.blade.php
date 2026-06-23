@@ -3,103 +3,182 @@
 @section('content')
 
 <div class="p-6">
-    <div class="flex justify-between items-center mb-6">
-        <h2 class="text-2xl font-bold">Manajemen Event</h2>
 
+<!-- Header -->
+<div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+
+    <div>
+        <h2 class="text-3xl font-extrabold text-slate-800 flex items-center gap-3">
+            🎫 Manajemen Event
+        </h2>
+
+        <p class="text-slate-500 mt-2">
+            Kelola seluruh event yang tersedia pada platform AmikomEventHub.
+        </p>
+    </div>
 
     <a href="{{ route('admin.events.create') }}"
-       class="bg-indigo-600 text-white px-4 py-2 rounded font-semibold hover:bg-indigo-700">
-        Tambah Event
+       class="mt-4 md:mt-0 px-5 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200">
+        + Tambah Event
     </a>
+
 </div>
 
 @if(session('success'))
-    <div class="bg-green-100 text-green-700 p-4 rounded mb-5 border border-green-200">
-        {{ session('success') }}
+    <div class="mb-6 bg-green-50 border border-green-200 text-green-700 px-5 py-4 rounded-2xl font-medium">
+        ✅ {{ session('success') }}
     </div>
 @endif
 
-<div class="overflow-x-auto">
-    <table class="w-full bg-white rounded-lg shadow-sm border border-gray-200 text-left">
-        <thead>
-            <tr class="bg-gray-50 border-b border-gray-200">
-                <th class="p-4 font-semibold text-gray-600">Poster</th>
-                <th class="p-4 font-semibold text-gray-600">Judul Event</th>
-                <th class="p-4 font-semibold text-gray-600">Kategori</th>
-                <th class="p-4 font-semibold text-gray-600">Tanggal</th>
-                <th class="p-4 font-semibold text-gray-600">Aksi Pilihan</th>
-            </tr>
-        </thead>
+<!-- Card Table -->
+<div class="bg-white rounded-[2rem] border border-slate-100 shadow-lg overflow-hidden">
 
-        <tbody>
-            @foreach($events as $event)
-                <tr class="border-b border-gray-100 hover:bg-gray-50">
+    <div class="px-8 py-5 border-b bg-gradient-to-r from-indigo-50 to-white">
 
-                    <td class="p-4">
-                        @if($event->poster_path)
-                            <img src="{{ asset('storage/' . $event->poster_path) }}"
-                                 alt="{{ $event->title }}"
-                                 class="w-20 h-20 object-cover rounded-lg border">
-                        @else
-                            <span class="text-gray-400 text-sm">
-                                Tidak Ada
+        <h3 class="font-bold text-slate-800 text-lg">
+            Daftar Event
+        </h3>
+
+        <p class="text-sm text-slate-500 mt-1">
+           
+        </p>
+
+    </div>
+
+    <div class="overflow-x-auto">
+
+        <table class="w-full text-left">
+
+            <thead>
+                <tr class="bg-slate-50 border-b border-slate-100 text-slate-500 uppercase text-[11px] tracking-wider">
+                    <th class="px-6 py-4 font-bold">Poster</th>
+                    <th class="px-6 py-4 font-bold">Judul Event</th>
+                    <th class="px-6 py-4 font-bold">Kategori</th>
+                    <th class="px-6 py-4 font-bold">Tanggal</th>
+                    <th class="px-6 py-4 font-bold">Aksi</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @forelse($events as $event)
+
+                    <tr class="border-b border-slate-100 hover:bg-indigo-50/40 transition-all duration-200">
+
+                        <td class="px-6 py-5">
+
+                            @if($event->poster_path)
+
+                                <img src="{{ asset('storage/' . $event->poster_path) }}"
+                                     alt="{{ $event->title }}"
+                                     class="w-20 h-20 object-cover rounded-2xl border shadow-sm">
+
+                            @else
+
+                                <div class="w-20 h-20 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-400 text-sm">
+                                    No Image
+                                </div>
+
+                            @endif
+
+                        </td>
+
+                        <td class="px-6 py-5">
+
+                            <h4 class="font-bold text-slate-800">
+                                {{ $event->title }}
+                            </h4>
+
+                        </td>
+
+                        <td class="px-6 py-5">
+
+                            <span class="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-xl text-sm font-semibold">
+                                {{ $event->category->name ?? '-' }}
                             </span>
-                        @endif
-                    </td>
 
-                    <td class="p-4 text-gray-800 font-medium">
-                        {{ $event->title }}
-                    </td>
+                        </td>
 
-                    <td class="p-4 text-indigo-600">
-                        {{ $event->category->name ?? '-' }}
-                    </td>
+                        <td class="px-6 py-5 text-slate-600">
 
-                    <td class="p-4 text-gray-600">
-                        {{ $event->date->format('d M Y, H:i') }}
-                    </td>
+                            {{ $event->date->format('d M Y') }}
 
-                    <td class="p-4 flex gap-2">
+                            <div class="text-xs text-slate-400 mt-1">
+                                {{ $event->date->format('H:i') }}
+                            </div>
 
-                        <a href="{{ route('admin.events.edit', $event->id) }}"
-                           class="bg-blue-50 text-blue-600 border border-blue-200 px-3 py-1.5 rounded text-sm font-semibold hover:bg-blue-600 hover:text-white transition">
-                            Edit Data
-                        </a>
+                        </td>
 
-                        <form action="{{ route('admin.events.destroy', $event->id) }}"
-                              method="POST"
-                              onsubmit="return confirm('Yakin ingin menghapus event ini?');">
+                        <td class="px-6 py-5">
 
-                            @csrf
-                            @method('DELETE')
+                            <div class="flex gap-2">
 
-                            <button type="submit"
-                                    class="bg-red-100 text-red-600 border border-red-200 px-3 py-1.5 rounded text-sm font-semibold hover:bg-red-600 hover:text-white transition">
-                                Hapus
-                            </button>
+                                <a href="{{ route('admin.events.edit', $event->id) }}"
+                                   class="px-4 py-2 bg-indigo-50 text-indigo-600 rounded-xl font-semibold hover:bg-indigo-600 hover:text-white transition">
+                                    Edit
+                                </a>
 
-                        </form>
+                                <form action="{{ route('admin.events.destroy', $event->id) }}"
+                                      method="POST"
+                                      onsubmit="return confirm('Yakin ingin menghapus event ini?');">
 
-                    </td>
-                </tr>
-            @endforeach
+                                    @csrf
+                                    @method('DELETE')
 
-            @if($events->isEmpty())
-                <tr>
-                    <td colspan="5" class="text-center p-4 text-gray-500">
-                        Belum ada data event.
-                    </td>
-                </tr>
-            @endif
+                                    <button type="submit"
+                                            class="px-4 py-2 bg-rose-50 text-rose-600 rounded-xl font-semibold hover:bg-rose-600 hover:text-white transition">
+                                        Hapus
+                                    </button>
 
-        </tbody>
-    </table>
+                                </form>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                @empty
+
+                    <tr>
+
+                        <td colspan="5" class="text-center py-16">
+
+                            <div class="flex flex-col items-center">
+
+                                <div class="text-5xl mb-3">
+                                    🎟️
+                                </div>
+
+                                <h3 class="font-bold text-slate-700">
+                                    Belum Ada Event
+                                </h3>
+
+                                <p class="text-slate-400 text-sm mt-2">
+                                    Silakan tambahkan event baru terlebih dahulu.
+                                </p>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                @endforelse
+
+            </tbody>
+
+        </table>
+
+    </div>
+
 </div>
 
-<div class="mt-4">
+<div class="mt-6">
     {{ $events->links() }}
 </div>
 
 
 </div>
+
 @endsection
