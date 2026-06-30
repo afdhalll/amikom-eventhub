@@ -46,101 +46,111 @@
 
                 @forelse($transactions as $trx)
 
-                    <tr class="hover:bg-indigo-50/40 transition-all duration-200">
+                <tr class="hover:bg-indigo-50/40 transition duration-200">
 
-                        <td class="px-8 py-6">
-                            <span class="font-mono text-sm font-bold bg-indigo-50 text-indigo-600 px-3 py-2 rounded-xl">
-                                {{ $trx->order_id }}
-                            </span>
-                        </td>
+                    <td class="px-8 py-6">
+                        <span class="font-mono text-sm font-bold bg-indigo-50 text-indigo-600 px-3 py-2 rounded-xl">
+                            {{ $trx->order_id }}
+                        </span>
+                    </td>
 
-                        <td class="px-8 py-6">
+                    <td class="px-8 py-6">
+                        <p class="font-bold text-slate-800">
+                            {{ $trx->customer_name }}
+                        </p>
 
-                            <p class="font-bold text-slate-800">
-                                {{ $trx->customer_name }}
-                            </p>
+                        <p class="text-xs text-slate-500 mt-1">
+                            {{ $trx->customer_email }}
+                        </p>
 
-                            <p class="text-xs text-slate-500 mt-1">
-                                {{ $trx->customer_email }}
-                            </p>
+                        <p class="text-xs text-slate-400">
+                            {{ $trx->customer_phone }}
+                        </p>
+                    </td>
 
-                            <p class="text-xs text-slate-400">
-                                {{ $trx->customer_phone }}
-                            </p>
+                    <td class="px-8 py-6">
+                        <span class="font-semibold text-slate-700">
+                            {{ $trx->event->title ?? '-' }}
+                        </span>
+                    </td>
 
-                        </td>
+                    <td class="px-8 py-6 text-sm text-slate-500">
+                        {{ $trx->created_at->format('d M Y') }}
+                        <br>
+                        <span class="text-xs text-slate-400">
+                            {{ $trx->created_at->format('H:i') }}
+                        </span>
+                    </td>
 
-                        <td class="px-8 py-6">
-                            <span class="font-semibold text-slate-700">
-                                {{ $trx->event->title ?? '-' }}
-                            </span>
-                        </td>
+                    <td class="px-8 py-6">
 
-                        <td class="px-8 py-6 text-sm text-slate-500">
-                            {{ $trx->created_at->format('d M Y') }}
-                            <br>
-                            <span class="text-xs text-slate-400">
-                                {{ $trx->created_at->format('H:i') }}
-                            </span>
-                        </td>
+                        @if($trx->status == 'Success')
 
-                        <td class="px-8 py-6">
-
-                            @if($trx->status === 'settlement' || $trx->status === 'success')
-
-                                <span class="inline-flex items-center gap-2 px-3 py-2 bg-green-50 text-green-700 rounded-xl text-xs font-bold">
-                                    🟢 Success
-                                </span>
-
-                            @elseif($trx->status === 'pending')
-
-                                <span class="inline-flex items-center gap-2 px-3 py-2 bg-orange-50 text-orange-700 rounded-xl text-xs font-bold">
-                                    🟠 Pending
-                                </span>
-
-                            @else
-
-                                <span class="inline-flex items-center gap-2 px-3 py-2 bg-rose-50 text-rose-700 rounded-xl text-xs font-bold">
-                                    🔴 {{ ucfirst($trx->status) }}
-                                </span>
-
-                            @endif
-
-                        </td>
-
-                        <td class="px-8 py-6 text-right">
-
-                            <span class="text-lg font-black text-emerald-600">
-                                Rp {{ number_format($trx->total_price, 0, ',', '.') }}
+                            <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-100 text-green-700 text-xs font-bold">
+                                ✅ Success
                             </span>
 
-                        </td>
+                        @elseif($trx->status == 'Pending')
 
-                    </tr>
+                            <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-yellow-100 text-yellow-700 text-xs font-bold">
+                                ⏳ Pending
+                            </span>
+
+                        @elseif($trx->status == 'Failed')
+
+                            <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-100 text-red-700 text-xs font-bold">
+                                ❌ Failed
+                            </span>
+
+                        @elseif($trx->status == 'Expired')
+
+                            <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gray-200 text-gray-700 text-xs font-bold">
+                                ⌛ Expired
+                            </span>
+
+                        @else
+
+                            <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-100 text-slate-700 text-xs font-bold">
+                                {{ $trx->status }}
+                            </span>
+
+                        @endif
+
+                    </td>
+
+                    <td class="px-8 py-6 text-right">
+
+                        <span class="text-lg font-black text-emerald-600">
+                            Rp {{ number_format($trx->total_price, 0, ',', '.') }}
+                        </span>
+
+                    </td>
+
+                </tr>
 
                 @empty
 
-                    <tr>
-                        <td colspan="6" class="px-8 py-16 text-center">
+                <tr>
+                    <td colspan="6" class="px-8 py-16 text-center">
 
-                            <div class="flex flex-col items-center gap-3">
+                        <div class="flex flex-col items-center gap-3">
 
-                                <div class="text-5xl">
-                                    📭
-                                </div>
-
-                                <p class="font-bold text-slate-600">
-                                    Belum ada transaksi
-                                </p>
-
-                                <p class="text-sm text-slate-400">
-                                    Data transaksi akan muncul setelah pengguna melakukan checkout.
-                                </p>
-
+                            <div class="text-5xl">
+                                📭
                             </div>
 
-                        </td>
-                    </tr>
+                            <p class="font-bold text-slate-600">
+                                Belum ada transaksi
+                            </p>
+
+                            <p class="text-sm text-slate-400">
+                                Data transaksi akan muncul setelah pengguna melakukan checkout.
+                            </p>
+
+                        </div>
+
+                    </td>
+                </tr>
 
                 @endforelse
 

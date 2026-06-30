@@ -170,28 +170,36 @@
 
     </div>
 
+    <!-- Beranda -->
+    <a href="{{ url('/') }}"
+       class="w-full flex items-center gap-4 px-5 py-4 rounded-2xl bg-indigo-600 text-white hover:bg-indigo-700 transition-all duration-300 font-bold">
+
+        <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+            🏠
+        </div>
+
+        <span>Beranda</span>
+
+    </a>
+
     <!-- Logout -->
-    <div class="pt-5 border-t border-indigo-700">
+    <form action="{{ route('admin.logout') }}" method="POST">
 
-        <form action="{{ route('admin.logout') }}" method="POST">
+        @csrf
 
-            @csrf
+        <button
+            type="submit"
+            class="w-full flex items-center gap-4 px-5 py-4 rounded-2xl bg-red-500 text-white hover:bg-red-600 transition-all duration-300 font-bold">
 
-            <button
-                type="submit"
-                class="w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-indigo-200 hover:bg-red-500 hover:text-white transition-all duration-300 font-bold">
+            <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+                🚪
+            </div>
 
-                <div class="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center">
-                    🚪
-                </div>
+            <span>Logout</span>
 
-                <span>Keluar</span>
+        </button>
 
-            </button>
-
-        </form>
-
-    </div>
+    </form>
 
 </div>
 
