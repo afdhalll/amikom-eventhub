@@ -7,6 +7,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\MidtransWebhookController;
 
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -33,26 +34,34 @@ Route::get('/ticket', [TicketController::class, 'index']);
 |--------------------------------------------------------------------------
 */
 
-    Route::get('/checkout/{event}', [CheckoutController::class, 'create'])
+Route::get('/checkout/{event}', [CheckoutController::class, 'create'])
     ->name('checkout.create');
 
-    Route::post('/checkout/{event}', [CheckoutController::class, 'store'])
+Route::post('/checkout/{event}', [CheckoutController::class, 'store'])
     ->name('checkout.store');
 
-    Route::get('/payment/{order_id}', [CheckoutController::class, 'payment'])
+Route::get('/payment/{order_id}', [CheckoutController::class, 'payment'])
     ->name('checkout.payment');
 
-    Route::get('/checkout/{event}', [CheckoutController::class, 'create'])
+Route::get('/checkout/{event}', [CheckoutController::class, 'create'])
     ->name('checkout.create');
 
-    Route::post('/checkout/{event}', [CheckoutController::class, 'store'])
+Route::post('/checkout/{event}', [CheckoutController::class, 'store'])
     ->name('checkout.store');
 
-    Route::get('/payment/{order_id}', [CheckoutController::class, 'payment'])
+Route::get('/payment/{order_id}', [CheckoutController::class, 'payment'])
     ->name('checkout.payment');
 
-    Route::get('/success/{order_id}', [CheckoutController::class, 'success'])
+Route::get('/success/{order_id}', [CheckoutController::class, 'success'])
     ->name('checkout.success');
+
+/*
+|--------------------------------------------------------------------------
+| Midtrans Webhook
+|--------------------------------------------------------------------------
+*/
+
+Route::post('/midtrans/callback', [MidtransWebhookController::class, 'handle']);
 
 /*
 |--------------------------------------------------------------------------

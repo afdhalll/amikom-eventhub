@@ -69,8 +69,8 @@
                 Total Pendapatan
             </p>
 
-            <h3 class="text-4xl font-black">
-                Rp 12JT
+           <h3 class="text-4xl font-black">
+             Rp {{ number_format($totalRevenue, 0, ',', '.') }}
             </h3>
 
         </div>
@@ -93,7 +93,7 @@
             </p>
 
             <h3 class="text-4xl font-black">
-                1.284
+              {{ number_format($ticketsSold, 0, ',', '.') }}
             </h3>
 
         </div>
@@ -116,7 +116,7 @@
             </p>
 
             <h3 class="text-4xl font-black">
-                8 Event
+             {{ $activeEvents }} Event
             </h3>
 
         </div>
@@ -139,7 +139,7 @@
             </p>
 
             <h3 class="text-4xl font-black">
-                12 Pesanan
+                 {{ $pendingOrders }} Pesanan
             </h3>
 
         </div>
@@ -167,12 +167,12 @@
 
                 </div>
 
-                <a href="#"
-                   class="text-indigo-600 font-bold hover:underline">
+                <a href="{{ route('admin.transactions.index') }}"
+                class="text-indigo-600 font-bold hover:underline">
 
-                    Lihat Semua
+                 Lihat Semua
 
-                </a>
+                    </a>
 
             </div>
 
@@ -194,150 +194,90 @@
 
                     </thead>
 
-                    <tbody class="divide-y divide-slate-100">
+                   <tbody class="divide-y divide-slate-100">
 
-                        <!-- Row -->
-                        <tr class="hover:bg-slate-50 transition">
+    @forelse($recentTransactions as $trx)
 
-                            <td class="px-8 py-6">
+        <tr class="hover:bg-slate-50 transition">
 
-                                <div class="flex items-center gap-4">
+            <td class="px-8 py-6">
 
-                                    <div class="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-600 flex items-center justify-center font-black">
-                                        D
-                                    </div>
+                <div class="flex items-center gap-4">
 
-                                    <div>
+                    <div class="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-600 flex items-center justify-center font-black">
+                        {{ strtoupper(substr($trx->customer_name, 0, 1)) }}
+                    </div>
 
-                                        <p class="font-bold text-slate-800">
-                                            Donni Prabowo
-                                        </p>
+                    <div>
 
-                                        <p class="text-sm text-slate-400">
-                                            donni@example.com
-                                        </p>
+                        <p class="font-bold text-slate-800">
+                            {{ $trx->customer_name }}
+                        </p>
 
-                                    </div>
+                        <p class="text-sm text-slate-400">
+                            {{ $trx->customer_email }}
+                        </p>
 
-                                </div>
+                    </div>
 
-                            </td>
+                </div>
 
-                            <td class="px-8 py-6 font-semibold text-slate-600">
-                                Jazz Night 2024
-                            </td>
+            </td>
 
-                            <td class="px-8 py-6">
+            <td class="px-8 py-6 font-semibold text-slate-600">
+                {{ $trx->event->title ?? '-' }}
+            </td>
 
-                                <span class="px-4 py-2 rounded-xl bg-green-100 text-green-700 text-xs font-bold uppercase">
+           <td class="px-8 py-6">
 
-                                    Success
+    @php
+        $status = strtolower($trx->status);
+    @endphp
 
-                                </span>
+    @if(in_array($status, ['success', 'settlement']))
+        <span class="px-4 py-2 rounded-xl bg-green-100 text-green-700 text-xs font-bold uppercase">
+            ✅ Success
+        </span>
 
-                            </td>
+    @elseif($status == 'pending')
+        <span class="px-4 py-2 rounded-xl bg-yellow-100 text-yellow-700 text-xs font-bold uppercase">
+            ⏳ Pending
+        </span>
 
-                            <td class="px-8 py-6 font-black text-indigo-600 text-lg">
-                                Rp 155.000
-                            </td>
+    @elseif(in_array($status, ['cancel','deny','expire','failed']))
+        <span class="px-4 py-2 rounded-xl bg-red-100 text-red-700 text-xs font-bold uppercase">
+            ❌ {{ ucfirst($status) }}
+        </span>
 
-                        </tr>
+    @else
+        <span class="px-4 py-2 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold uppercase">
+            {{ $trx->status }}
+        </span>
+    @endif
 
-                        <!-- Row -->
-                        <tr class="hover:bg-slate-50 transition">
+</td>
 
-                            <td class="px-8 py-6">
+            <td class="px-8 py-6 font-black text-indigo-600 text-lg">
+                Rp {{ number_format($trx->total_price, 0, ',', '.') }}
+            </td>
 
-                                <div class="flex items-center gap-4">
+        </tr>
 
-                                    <div class="w-12 h-12 rounded-2xl bg-pink-100 text-pink-600 flex items-center justify-center font-black">
-                                        M
-                                    </div>
+    @empty
 
-                                    <div>
+        <tr>
 
-                                        <p class="font-bold text-slate-800">
-                                            Maya Sari
-                                        </p>
+            <td colspan="4" class="px-8 py-10 text-center text-slate-500">
 
-                                        <p class="text-sm text-slate-400">
-                                            maya@example.com
-                                        </p>
+                Belum ada transaksi.
 
-                                    </div>
+            </td>
 
-                                </div>
+        </tr>
 
-                            </td>
+    @endforelse
 
-                            <td class="px-8 py-6 font-semibold text-slate-600">
-                                AI & Future Workshop
-                            </td>
-
-                            <td class="px-8 py-6">
-
-                                <span class="px-4 py-2 rounded-xl bg-orange-100 text-orange-700 text-xs font-bold uppercase">
-
-                                    Pending
-
-                                </span>
-
-                            </td>
-
-                            <td class="px-8 py-6 font-black text-indigo-600 text-lg">
-                                Rp 55.000
-                            </td>
-
-                        </tr>
-
-                        <!-- Row -->
-                        <tr class="hover:bg-slate-50 transition">
-
-                            <td class="px-8 py-6">
-
-                                <div class="flex items-center gap-4">
-
-                                    <div class="w-12 h-12 rounded-2xl bg-slate-200 text-slate-700 flex items-center justify-center font-black">
-                                        B
-                                    </div>
-
-                                    <div>
-
-                                        <p class="font-bold text-slate-800">
-                                            Budi Santoso
-                                        </p>
-
-                                        <p class="text-sm text-slate-400">
-                                            budi@example.com
-                                        </p>
-
-                                    </div>
-
-                                </div>
-
-                            </td>
-
-                            <td class="px-8 py-6 font-semibold text-slate-600">
-                                Hackathon 2024
-                            </td>
-
-                            <td class="px-8 py-6">
-
-                                <span class="px-4 py-2 rounded-xl bg-slate-100 text-slate-600 text-xs font-bold uppercase">
-
-                                    Free
-
-                                </span>
-
-                            </td>
-
-                            <td class="px-8 py-6 font-black text-indigo-600 text-lg">
-                                Rp 0
-                            </td>
-
-                        </tr>
-
-                    </tbody>
+</tbody>
 
                 </table>
 

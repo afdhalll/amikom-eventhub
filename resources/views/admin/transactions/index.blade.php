@@ -84,37 +84,35 @@
 
                     <td class="px-8 py-6">
 
-                        @if($trx->status == 'Success')
+         @php
+    $status = strtolower($trx->status);
+@endphp
 
-                            <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-100 text-green-700 text-xs font-bold">
-                                ✅ Success
-                            </span>
+@if(in_array($status, ['success', 'settlement']))
 
-                        @elseif($trx->status == 'Pending')
+<span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-100 text-emerald-700 border border-emerald-200 text-xs font-bold">
+    ✅ Success
+</span>
 
-                            <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-yellow-100 text-yellow-700 text-xs font-bold">
-                                ⏳ Pending
-                            </span>
+@elseif($status == 'pending')
 
-                        @elseif($trx->status == 'Failed')
+    <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-yellow-100 text-yellow-700 text-xs font-bold">
+        ⏳ Pending
+    </span>
 
-                            <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-100 text-red-700 text-xs font-bold">
-                                ❌ Failed
-                            </span>
+@elseif(in_array($status, ['failed','expire','expired','cancel','deny']))
 
-                        @elseif($trx->status == 'Expired')
+    <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-100 text-red-700 text-xs font-bold">
+        ❌ Failed
+    </span>
 
-                            <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gray-200 text-gray-700 text-xs font-bold">
-                                ⌛ Expired
-                            </span>
+@else
 
-                        @else
+    <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-100 text-slate-700 text-xs font-bold">
+        {{ ucfirst($trx->status) }}
+    </span>
 
-                            <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-100 text-slate-700 text-xs font-bold">
-                                {{ $trx->status }}
-                            </span>
-
-                        @endif
+@endif
 
                     </td>
 
