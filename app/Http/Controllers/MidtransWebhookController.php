@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\EventTicketMail;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class MidtransWebhookController extends Controller
 {
@@ -21,7 +24,7 @@ class MidtransWebhookController extends Controller
             ], 400);
         }
 
-        // Mencari transaksi di database lokal
+        // Cari transaksi
         $transaction = Transaction::with('event')
             ->where('order_id', $orderId)
             ->first();
@@ -32,7 +35,7 @@ class MidtransWebhookController extends Controller
             ], 404);
         }
 
-        // Cegah proses ulang jika transaksi sudah sukses
+        // Hindari proses dua kali
         if (
             $transaction->status === 'settlement' ||
             $transaction->status === 'success'
@@ -42,7 +45,7 @@ class MidtransWebhookController extends Controller
             ]);
         }
 
-        // Logika penerjemahan status Midtrans
+        // Mapping status Midtrans
         if ($transactionStatus == 'capture') {
 
             if ($fraudStatus == 'challenge') {
@@ -84,7 +87,37 @@ class MidtransWebhookController extends Controller
 
     private function processSuccess(Transaction $transaction)
     {
-        // Instruksi lanjutan saat transaksi lunas
-        // akan dibahas pada Modul 13
+        $event = $transaction->event;
+
+        // Jika tiket masih tersedia
+        if ($event && $event->stock > 0) {
+
+            // Kurangi stok
+            $event->stock = $event->stock - 1;
+            $event->save();
+
+            // Kirim Email E-Ticket
+            try {
+
+                Mail::to($transaction->customer_email)
+                    ->send(new EventTicketMail($transaction));
+
+            } catch (\Exception $e) {
+
+                Log::error(
+                    'Gagal mengirim email E-Ticket: ' .
+                    $e->getMessage()
+                );
+
+            }
+
+        } else {
+
+            Log::warning(
+                'Stock habis setelah pembayaran berhasil (Perlu proses refund opsional). Order: '
+                . $transaction->order_id
+            );
+
+        }
     }
 }
