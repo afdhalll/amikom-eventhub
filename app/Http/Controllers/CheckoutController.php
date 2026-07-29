@@ -18,7 +18,6 @@ class CheckoutController extends Controller
 {
     public function create(Event $event)
     {
-        // Mengambil daftar kategori untuk keperluan menu footer
         $categories = \App\Models\Category::all();
 
         return view('checkout.create', compact('event', 'categories'));
@@ -44,7 +43,11 @@ class CheckoutController extends Controller
         // Generate Order ID
         $orderId = 'TRX-' . time() . '-' . Str::random(5);
 
-        $totalPrice = $event->price + 5000;
+        // Jika event gratis maka total = 0
+        // Jika berbayar maka + biaya admin 5000
+        $totalPrice = $event->price > 0
+            ? $event->price + 5000
+            : 0;
 
         // Simpan transaksi
         $transaction = Transaction::create([
@@ -57,7 +60,42 @@ class CheckoutController extends Controller
             'status'         => 'Pending',
         ]);
 
-        // Konfigurasi Midtrans
+        // ====================================================
+        // EVENT GRATIS (BYPASS MIDTRANS)
+        // ====================================================
+        if ($totalPrice == 0) {
+
+            $transaction->update([
+                'status' => 'Success'
+            ]);
+
+            // Kurangi stok
+            $event->decrement('stock');
+
+            // Kirim tiket
+            try {
+
+                Mail::to($transaction->customer_email)
+                    ->send(new \App\Mail\EventTicketMail($transaction));
+
+            } catch (\Exception $e) {
+
+                Log::error(
+                    'Gagal mengirim E-Ticket: ' . $e->getMessage()
+                );
+
+            }
+
+            return redirect()->route(
+                'checkout.success',
+                $transaction->order_id
+            );
+        }
+
+        // ====================================================
+        // MIDTRANS (EVENT BERBAYAR)
+        // ====================================================
+
         Config::$serverKey = env('MIDTRANS_SERVER_KEY');
         Config::$isProduction = false;
         Config::$isSanitized = true;
@@ -114,14 +152,22 @@ class CheckoutController extends Controller
 
     public function success($order_id)
     {
-        // Mengambil daftar kategori untuk footer
         $categories = \App\Models\Category::all();
 
         $transaction = Transaction::with('event')
             ->where('order_id', $order_id)
             ->firstOrFail();
 
-        // Konfigurasi Midtrans
+        // Kalau event gratis, langsung tampil halaman sukses
+        if ($transaction->total_price == 0) {
+
+            return view(
+                'checkout.success',
+                compact('transaction', 'categories')
+            );
+
+        }
+
         Config::$serverKey = env('MIDTRANS_SERVER_KEY');
         Config::$isProduction = false;
         Config::$isSanitized = true;
@@ -129,7 +175,6 @@ class CheckoutController extends Controller
 
         try {
 
-            // Ambil status transaksi dari Midtrans
             $status = MidtransTransaction::status($order_id);
 
             if ($status) {
@@ -138,25 +183,18 @@ class CheckoutController extends Controller
                     ? ($status['transaction_status'] ?? '')
                     : ($status->transaction_status ?? '');
 
-                // Jika pembayaran berhasil
                 if (in_array($trx_status, ['settlement', 'capture'])) {
 
-                    // Hanya jika database masih Pending
                     if (strtolower($transaction->status) == 'pending') {
 
                         $transaction->update([
                             'status' => 'Success'
                         ]);
 
-                        // Kurangi stok event
                         if ($transaction->event && $transaction->event->stock > 0) {
 
-                            $transaction->event->stock =
-                                $transaction->event->stock - 1;
+                            $transaction->event->decrement('stock');
 
-                            $transaction->event->save();
-
-                            // Kirim E-Ticket
                             try {
 
                                 Mail::to($transaction->customer_email)
@@ -165,7 +203,7 @@ class CheckoutController extends Controller
                             } catch (\Exception $e) {
 
                                 Log::error(
-                                    'Gagal mengirim E-Ticket (Bypass): ' .
+                                    'Gagal mengirim E-Ticket: ' .
                                     $e->getMessage()
                                 );
 

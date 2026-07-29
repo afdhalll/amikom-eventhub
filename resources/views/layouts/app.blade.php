@@ -99,24 +99,91 @@
             </a>
 
             <!-- Dashboard Admin -->
-            <a href="/admin/dashboard"
-               class="px-5 py-2.5 bg-indigo-600 text-white rounded-xl font-bold shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition">
+       @auth
 
-                Admin Dashboard
+<div class="flex items-center gap-3">
 
-            </a>
+    @if(in_array(Auth::user()->role, ['admin', 'superadmin']))
+
+        <a href="{{ route('admin.dashboard') }}"
+           class="px-4 py-2 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 transition">
+            Dashboard
+        </a>
+
+    @endif
+
+    <span class="px-4 py-2 bg-green-100 text-green-700 rounded-xl font-semibold">
+        Halo, {{ Auth::user()->name }}
+    </span>
+
+    <a href="{{ route('google.logout') }}"
+       class="px-4 py-2 bg-red-500 text-white rounded-xl font-bold hover:bg-red-600 transition">
+        Logout
+    </a>
+
+</div>
+
+@else
+
+<a href="{{ route('admin.login') }}"
+   class="px-5 py-2.5 bg-indigo-600 text-white rounded-xl font-bold shadow-lg hover:bg-indigo-700 transition">
+    Admin Dashboard
+</a>
+
+@endauth
 
         </div>
 
         <!-- Mobile -->
-        <button class="md:hidden bg-indigo-600 text-white px-4 py-2 rounded-xl">
-
-            Menu
-
-        </button>
+   <button id="menuBtn"
+    class="md:hidden bg-indigo-600 text-white px-4 py-2 rounded-xl">
+    ☰
+</button>
 
     </nav>
+<div id="mobileMenu"
+    class="hidden md:hidden mx-4 mt-2 bg-white rounded-2xl shadow-lg p-5 space-y-4">
 
+    <a href="/" class="block font-semibold hover:text-indigo-600">
+        Home
+    </a>
+
+    <a href="#events" class="block font-semibold hover:text-indigo-600">
+        Event
+    </a>
+
+    <a href="#partner" class="block font-semibold hover:text-indigo-600">
+        Partner Kami
+    </a>
+
+    <a href="#footer" class="block font-semibold hover:text-indigo-600">
+        Tentang Kami
+    </a>
+
+    @auth
+
+        @if(in_array(Auth::user()->role,['admin','superadmin']))
+            <a href="{{ route('admin.dashboard') }}"
+               class="block font-semibold text-indigo-600">
+                Dashboard
+            </a>
+        @endif
+
+        <a href="{{ route('google.logout') }}"
+           class="block text-red-600 font-semibold">
+            Logout
+        </a>
+
+    @else
+
+        <a href="{{ route('admin.login') }}"
+           class="block text-indigo-600 font-semibold">
+            Admin Dashboard
+        </a>
+
+    @endauth
+
+</div>
     <!-- ========================= -->
     <!-- CONTENT -->
     <!-- ========================= -->
@@ -278,7 +345,14 @@
         </div>
 
     </footer>
+<script>
+const menuBtn = document.getElementById('menuBtn');
+const mobileMenu = document.getElementById('mobileMenu');
 
+menuBtn.addEventListener('click', () => {
+    mobileMenu.classList.toggle('hidden');
+});
+</script>
 </body>
 
 </html>

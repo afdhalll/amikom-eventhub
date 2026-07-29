@@ -146,6 +146,58 @@
 
     </div>
 
+<!-- Statistik Pendapatan -->
+<div class="bg-white rounded-3xl shadow-sm border border-slate-100 p-8">
+
+    <div class="flex items-center justify-between mb-6">
+
+        <div>
+            <h3 class="text-2xl font-black text-slate-800">
+                Statistik Pendapatan Bulanan
+            </h3>
+
+            <p class="text-slate-500 mt-1">
+                Total pendapatan transaksi berhasil setiap bulan
+            </p>
+        </div>
+
+    </div>
+
+    <div class="h-80">
+    <canvas id="revenueChart"></canvas>
+</div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+    <!-- Pie Chart -->
+    <div class="bg-white rounded-3xl shadow-sm border border-slate-100 p-8">
+
+        <h3 class="text-xl font-black text-slate-800 mb-6">
+            Status Transaksi
+        </h3>
+
+        <div class="h-72">
+            <canvas id="statusChart"></canvas>
+        </div>
+
+    </div>
+
+    <!-- Doughnut Chart -->
+    <div class="bg-white rounded-3xl shadow-sm border border-slate-100 p-8">
+
+        <h3 class="text-xl font-black text-slate-800 mb-6">
+            Data Sistem
+        </h3>
+
+        <div class="h-72">
+            <canvas id="systemChart"></canvas>
+        </div>
+
+    </div>
+
+</div>
+
     <!-- Main Grid -->
     <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
 
@@ -286,82 +338,270 @@
         </div>
 
         <!-- Activity -->
-        <div class="bg-white rounded-3xl shadow-sm border border-slate-100 p-8">
+<div class="bg-white rounded-3xl shadow-sm border border-slate-100 p-8">
 
-            <h3 class="text-2xl font-black text-slate-800 mb-8">
+    <h3 class="text-2xl font-black text-slate-800 mb-8">
+        Aktivitas Admin
+    </h3>
 
-                Aktivitas Admin
+    <div class="space-y-6">
 
-            </h3>
-
-            <div class="space-y-6">
-
-                <div class="flex gap-4">
-
-                    <div class="w-12 h-12 rounded-2xl bg-indigo-100 flex items-center justify-center text-indigo-600">
-                        🎉
-                    </div>
-
-                    <div>
-
-                        <p class="font-bold text-slate-700">
-                            Event baru ditambahkan
-                        </p>
-
-                        <p class="text-sm text-slate-400">
-                            2 menit lalu
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <div class="flex gap-4">
-
-                    <div class="w-12 h-12 rounded-2xl bg-pink-100 flex items-center justify-center text-pink-600">
-                        🤝
-                    </div>
-
-                    <div>
-
-                        <p class="font-bold text-slate-700">
-                            Partner baru ditambahkan
-                        </p>
-
-                        <p class="text-sm text-slate-400">
-                            10 menit lalu
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <div class="flex gap-4">
-
-                    <div class="w-12 h-12 rounded-2xl bg-green-100 flex items-center justify-center text-green-600">
-                        💳
-                    </div>
-
-                    <div>
-
-                        <p class="font-bold text-slate-700">
-                            Pembayaran berhasil
-                        </p>
-
-                        <p class="text-sm text-slate-400">
-                            25 menit lalu
-                        </p>
-
-                    </div>
-
-                </div>
-
+        <div class="flex items-start gap-4">
+            <div class="w-12 h-12 rounded-2xl bg-indigo-100 flex items-center justify-center text-xl">
+                🎉
             </div>
 
+            <div>
+                <p class="font-bold text-slate-700">
+                    Event baru ditambahkan
+                </p>
+                <p class="text-xs text-slate-400">
+                    2 menit lalu
+                </p>
+            </div>
+        </div>
+
+        <div class="flex items-start gap-4">
+            <div class="w-12 h-12 rounded-2xl bg-pink-100 flex items-center justify-center text-xl">
+                🤝
+            </div>
+
+            <div>
+                <p class="font-bold text-slate-700">
+                    Partner baru ditambahkan
+                </p>
+                <p class="text-xs text-slate-400">
+                    10 menit lalu
+                </p>
+            </div>
+        </div>
+
+        <div class="flex items-start gap-4">
+            <div class="w-12 h-12 rounded-2xl bg-green-100 flex items-center justify-center text-xl">
+                💳
+            </div>
+
+            <div>
+                <p class="font-bold text-slate-700">
+                    Pembayaran berhasil
+                </p>
+                <p class="text-xs text-slate-400">
+                    25 menit lalu
+                </p>
+            </div>
+        </div>
+
+        <div class="flex items-start gap-4">
+            <div class="w-12 h-12 rounded-2xl bg-blue-100 flex items-center justify-center text-xl">
+                🏢
+            </div>
+
+            <div>
+                <p class="font-bold text-slate-700">
+                    Organisasi HIMA SI ditambahkan
+                </p>
+                <p class="text-xs text-slate-400">
+                    1 jam lalu
+                </p>
+            </div>
+        </div>
+
+        <div class="flex items-start gap-4">
+            <div class="w-12 h-12 rounded-2xl bg-purple-100 flex items-center justify-center text-xl">
+                👤
+            </div>
+
+            <div>
+                <p class="font-bold text-slate-700">
+                    Admin baru dibuat
+                </p>
+                <p class="text-xs text-slate-400">
+                    2 jam lalu
+                </p>
+            </div>
+        </div>
+
+        <div class="flex items-start gap-4">
+            <div class="w-12 h-12 rounded-2xl bg-yellow-100 flex items-center justify-center text-xl">
+                📂
+            </div>
+
+            <div>
+                <p class="font-bold text-slate-700">
+                    Kategori Seminar ditambahkan
+                </p>
+                <p class="text-xs text-slate-400">
+                    Hari ini
+                </p>
+            </div>
         </div>
 
     </div>
 
 </div>
 
+    </div>
+
+</div>
+
 @endsection
+
+@push('scripts')
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+const revenueCtx = document.getElementById('revenueChart');
+
+if (revenueCtx) {
+
+    new Chart(revenueCtx, {
+        type: 'bar',
+        data: {
+            labels: @json($chartLabels),
+            datasets: [{
+                label: 'Pendapatan',
+                data: @json($chartData),
+                backgroundColor: '#6366f1',
+                borderRadius: 8
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+
+            plugins: {
+                legend: {
+                    display: false
+                },
+
+                tooltip: {
+                    callbacks: {
+                        label(context) {
+                            return 'Rp ' + Number(context.raw).toLocaleString('id-ID');
+                        }
+                    }
+                }
+            },
+
+            scales: {
+                y: {
+                    beginAtZero: true,
+
+                    grid: {
+                        color: 'rgba(0,0,0,0.05)',
+                        drawBorder: false
+                    },
+
+                    ticks: {
+                        callback(value) {
+                            return 'Rp ' + Number(value).toLocaleString('id-ID');
+                        }
+                    }
+                },
+
+                x: {
+                    grid: {
+                        display: false
+                    }
+                }
+            }
+        }
+    });
+}
+
+const statusCtx = document.getElementById('statusChart');
+
+if (statusCtx) {
+
+    new Chart(statusCtx, {
+        type: 'pie',
+        data: {
+            labels: ['Success', 'Pending', 'Failed'],
+            datasets: [{
+                data: [
+                    {{ $successCount }},
+                    {{ $pendingCount }},
+                    {{ $failedCount }}
+                ],
+                backgroundColor: [
+                    '#22c55e',
+                    '#facc15',
+                    '#ef4444'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                },
+
+                tooltip: {
+                    callbacks: {
+                        label(context) {
+
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const value = context.raw;
+                            const percent = ((value / total) * 100).toFixed(1);
+
+                            return `${context.label}: ${value} (${percent}%)`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+const systemCtx = document.getElementById('systemChart');
+
+if (systemCtx) {
+
+    new Chart(systemCtx, {
+        type: 'doughnut',
+        data: {
+            labels: @json($systemLabels),
+            datasets: [{
+                data: @json($systemData),
+                backgroundColor: [
+                    '#6366f1',
+                    '#ec4899',
+                    '#22c55e',
+                    '#f59e0b'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                },
+
+                tooltip: {
+                    callbacks: {
+                        label(context) {
+
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const value = context.raw;
+                            const percent = ((value / total) * 100).toFixed(1);
+
+                            return `${context.label}: ${value} (${percent}%)`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+</script>
+
+@endpush

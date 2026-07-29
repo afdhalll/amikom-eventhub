@@ -11,6 +11,11 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        // Jalankan Seeder Organization
+        $this->call([
+            OrganizationSeeder::class,
+        ]);
+
         // Admin Default
         User::firstOrCreate(
             ['email' => 'admin@amikom.ac.id'],

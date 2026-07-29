@@ -39,34 +39,54 @@
     <!-- SIDEBAR -->
     <!-- ========================= -->
 
-    <aside class="w-72 bg-gradient-to-b from-indigo-900 to-indigo-800 text-indigo-100 flex flex-col p-6 space-y-8 sticky top-0 h-screen shadow-2xl">
+    <aside id="sidebar"
+class="fixed lg:sticky top-0 left-0 z-50
+w-80 h-screen overflow-y-auto
+bg-gradient-to-b from-indigo-900 to-indigo-800
+text-indigo-100 flex flex-col
+p-6 space-y-8 shadow-2xl
+transform -translate-x-full
+lg:translate-x-0
+transition-transform duration-300">
+        
+    <div class="flex justify-end lg:hidden">
 
-        <!-- Logo -->
-        <div class="flex items-center gap-4">
+    <button id="closeSidebar"
+        class="text-white text-3xl hover:text-red-300 transition">
 
-            <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-indigo-900 font-black text-xl shadow-lg">
+        ✕
 
-                AH
+    </button>
 
-            </div>
+</div>
+    <!-- Logo -->
+        <div class="flex items-center gap-3">
 
-            <div>
+    <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
 
-                <h1 class="text-2xl font-black text-white tracking-tight">
+        🎫
 
-                    AmikomEventHub
+    </div>
 
-                </h1>
+    <div>
 
-                <p class="text-xs text-indigo-300">
+        <h2 class="text-2xl font-bold text-white leading-none">
 
-                    Admin Dashboard
+            AmikomEventHub
 
-                </p>
+        </h2>
 
-            </div>
+        <p class="text-xs text-indigo-200 mt-1">
 
-        </div>
+            Admin Dashboard
+
+        </p>
+
+    </div>
+
+</div>
+
+        
 
         <!-- Menu -->
         <nav class="flex-1 space-y-3">
@@ -152,35 +172,89 @@
 
             </a>
 
+            <!-- Organisasi -->
+           @if(auth()->user()->role == 'superadmin')
+
+<!-- Organisasi -->
+
+<a href="{{ route('admin.organizations.index') }}"
+    class="flex items-center gap-4 px-5 py-4 rounded-2xl font-bold transition-all duration-300 hover:bg-indigo-700
+    {{ request()->is('admin/organizations*') ? 'bg-white/10 shadow-lg border border-white/10 text-white' : 'text-indigo-100 hover:text-white' }}">
+
+    <div class="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center">
+        🏢
+    </div>
+
+    Organisasi
+
+</a>
+
+<!-- Kelola User -->
+
+<a href="{{ route('admin.users.index') }}"
+    class="flex items-center gap-4 px-5 py-4 rounded-2xl font-bold transition-all duration-300 hover:bg-indigo-700
+    {{ request()->is('admin/users*') ? 'bg-white/10 shadow-lg border border-white/10 text-white' : 'text-indigo-100 hover:text-white' }}">
+
+    <div class="w-10 h-10 rounded-xl bg-pink-500/20 flex items-center justify-center">
+        👤
+    </div>
+
+    Kelola User
+
+</a>
+
+@endif
+
         </nav>
 
 <!-- Bottom -->
 <div class="space-y-5">
 
     <!-- Mini Card -->
-    <div class="bg-white/10 border border-white/10 rounded-3xl p-5 backdrop-blur-md">
+<div class="rounded-3xl bg-gradient-to-br from-indigo-500 to-violet-700 p-6 shadow-xl">
 
-        <p class="text-sm text-indigo-200 mb-2">
-            Total Event Aktif
-        </p>
 
-        <h3 class="text-3xl font-black text-white">
-            8 Event
-        </h3>
+    <p class="text-xs uppercase tracking-widest text-indigo-100">
+        EVENT BERLANGSUNG
+    </p>
 
+    @php
+        $totalEvents = auth()->user()->role == 'superadmin'
+            ? \App\Models\Event::count()
+            : \App\Models\Event::where(
+                'organization_id',
+                auth()->user()->organization_id
+            )->count();
+    @endphp
+
+    <h2 class="text-4xl font-black text-white mt-2">
+        {{ $totalEvents }}
+    </h2>
+
+    <p class="text-indigo-200 mt-1 text-sm">
+        Event aktif saat ini
+    </p>
+
+</div>
+   <!-- Website -->
+<a href="{{ url('/') }}"
+   class="w-full flex items-center gap-4 px-5 py-4 rounded-2xl bg-indigo-600 text-white hover:bg-indigo-700 transition-all duration-300 font-bold shadow-lg">
+
+    <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+        🌐
     </div>
 
-    <!-- Beranda -->
-    <a href="{{ url('/') }}"
-       class="w-full flex items-center gap-4 px-5 py-4 rounded-2xl bg-indigo-600 text-white hover:bg-indigo-700 transition-all duration-300 font-bold">
+    <div class="flex flex-col text-left leading-tight">
+        <span class="font-bold">
+            Website
+        </span>
 
-        <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
-            🏠
-        </div>
+        <span class="text-xs text-indigo-200">
+            Kembali ke Home
+        </span>
+    </div>
 
-        <span>Beranda</span>
-
-    </a>
+</a>
 
     <!-- Logout -->
     <form action="{{ route('admin.logout') }}" method="POST">
@@ -205,40 +279,53 @@
 
 </aside>
 
+<div id="overlay"
+     class="fixed inset-0 bg-black/50 z-40 hidden lg:hidden">
+</div>
+
     <!-- ========================= -->
     <!-- MAIN CONTENT -->
     <!-- ========================= -->
 
-    <main class="flex-1 p-10 overflow-y-auto">
+   <main class="flex-1 p-4 md:p-6 lg:p-10 overflow-y-auto">
 
         <!-- Top Header -->
         <header class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-10">
 
+<div class="flex items-center justify-between lg:hidden mb-4">
 
-            </div>
+    <button id="openSidebar"
+        class="p-3 rounded-xl bg-indigo-600 text-white shadow-lg">
+
+        ☰
+
+    </button>
+
+    <h2 class="font-bold text-slate-700">
+        Admin Panel
+    </h2>
+
+</div>
+            
 
             <!-- Profile -->
             <div class="flex items-center gap-4 bg-white px-5 py-3 rounded-3xl shadow-sm border border-slate-100">
 
                 <div class="text-right hidden md:block">
 
-                    <p class="font-black text-slate-800">
+                   <p class="font-black text-slate-800">
+    {{ Auth::user()->name }}
+</p>
 
-                        Admin Super
-
-                    </p>
-
-                    <p class="text-sm text-slate-400">
-
-                        Penyelenggara Utama
-
-                    </p>
+<p class="text-sm text-slate-400">
+    {{ ucfirst(Auth::user()->role) }}
+</p>
 
                 </div>
 
                 <div class="w-14 h-14 bg-gradient-to-br from-indigo-500 to-indigo-700 rounded-2xl shadow-lg flex items-center justify-center overflow-hidden">
 
-                    <img src="https://ui-avatars.com/api/?name=Admin+Super&background=6366f1&color=fff"
+                    <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=6366f1&color=fff"
                          class="rounded-2xl">
 
                 </div>
@@ -251,6 +338,35 @@
         @yield('content')
 
     </main>
+
+<script>
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('overlay');
+
+const openBtn = document.getElementById('openSidebar');
+const closeBtn = document.getElementById('closeSidebar');
+
+console.log(openBtn);
+console.log(closeBtn);
+console.log(sidebar);
+
+openBtn?.addEventListener('click', () => {
+    sidebar.classList.remove('-translate-x-full');
+    overlay.classList.remove('hidden');
+});
+
+closeBtn?.addEventListener('click', () => {
+    sidebar.classList.add('-translate-x-full');
+    overlay.classList.add('hidden');
+});
+
+overlay?.addEventListener('click', () => {
+    sidebar.classList.add('-translate-x-full');
+    overlay.classList.add('hidden');
+});
+</script>
+
+@stack('scripts')
 
 </body>
 

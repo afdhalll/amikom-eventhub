@@ -24,13 +24,13 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
 
-            // Cek apakah role admin
-            if (Auth::user()->role !== 'admin') {
+            // Izinkan admin dan superadmin
+            if (!in_array(Auth::user()->role, ['admin', 'superadmin'])) {
 
                 Auth::logout();
 
                 return back()->withErrors([
-                    'email' => 'Akses ditolak. Hanya admin yang dapat login.',
+                    'email' => 'Akses ditolak.',
                 ]);
             }
 

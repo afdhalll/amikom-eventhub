@@ -10,51 +10,68 @@ use Illuminate\Support\Facades\Storage;
 <!-- HERO SECTION -->
 <!-- ========================= -->
 
-<section class="max-w-7xl mx-auto px-6 py-20 flex flex-col md:flex-row items-center gap-12">
+<section class="max-w-7xl mx-auto px-4 sm:px-6 py-8 md:py-20 flex flex-col md:flex-row items-center gap-6 md:gap-12">
 
-    <div class="flex-1 space-y-8">
+    <!-- Hero Text -->
+   <div class="flex-1 text-center md:text-left space-y-5">
 
-        <span class="inline-block px-4 py-1.5 bg-indigo-100 text-indigo-700 rounded-full text-sm font-bold uppercase tracking-wider">
-
+        <span class="inline-block px-4 py-2 bg-indigo-100 text-indigo-700 rounded-full text-xs md:text-sm font-bold uppercase tracking-wider">
             #1 Event Platform
-
         </span>
 
-        <h1 class="text-5xl md:text-7xl font-extrabold leading-tight">
-
+        <h1 class="text-3xl sm:text-4xl lg:text-6xl font-extrabold leading-tight">
             Temukan & Pesan
             <span class="text-indigo-600">
                 Tiket Event
             </span>
             Impianmu.
-
         </h1>
 
-        <p class="text-lg text-slate-500 max-w-lg leading-relaxed">
-
+        <p class="text-base md:text-lg text-slate-500 max-w-lg mx-auto md:mx-0 leading-relaxed">
             Dari konser musik hingga workshop teknologi,
             semua ada di genggamanmu.
-
         </p>
 
-        <div class="flex gap-4">
+        <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
 
             <a href="#events"
-               class="px-8 py-4 bg-indigo-600 text-white rounded-2xl font-bold text-lg hover:bg-indigo-700 transition">
+                class="px-6 py-3 md:px-8 md:py-4 bg-indigo-600 text-white rounded-2xl font-bold hover:bg-indigo-700 transition">
 
                 Mulai Jelajah
 
             </a>
+
+            @guest
+
+            <a href="{{ route('google.login') }}"
+                class="w-full sm:w-auto px-6 py-3 md:px-8 md:py-4 bg-white border border-gray-300 rounded-2xl font-bold flex items-center justify-center gap-3 hover:bg-gray-100 transition">
+
+                <img src="https://www.svgrepo.com/show/475656/google-color.svg"
+                    class="w-6 h-6">
+
+                Login dengan Google
+
+            </a>
+
+            @else
+
+            <div class="px-6 py-3 bg-green-100 text-green-700 rounded-2xl font-semibold inline-block">
+
+                Halo, {{ auth()->user()->name }}
+
+            </div>
+
+            @endguest
 
         </div>
 
     </div>
 
     <!-- Hero Image -->
-    <div class="flex-1">
+    <div class="flex-1 flex justify-center mb-6 md:mb-0">
 
         <img src="{{ asset('assets/concert.png') }}"
-             class="rounded-[2rem] shadow-2xl w-full object-cover">
+            class="w-64 sm:w-80 md:w-full rounded-[2rem] shadow-2xl object-cover">
 
     </div>
 
@@ -65,10 +82,10 @@ use Illuminate\Support\Facades\Storage;
 <!-- ========================= -->
 
 <section id="events"
-         class="max-w-7xl mx-auto px-6 py-20">
+         class="max-w-7xl mx-auto px-4 sm:px-6 py-14 md:py-20">
 
     <!-- Header -->
-    <div class="flex justify-between items-end mb-12">
+    <div class="flex flex-col md:flex-row md:justify-between md:items-end gap-4 mb-12">
 
         <div>
 
@@ -117,7 +134,7 @@ use Illuminate\Support\Facades\Storage;
     </div>
 
     <!-- Event Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
         <!-- ========================= -->
         <!-- EVENT STATIS -->
@@ -139,7 +156,7 @@ use Illuminate\Support\Facades\Storage;
 
             </div>
 
-            <div class="p-6">
+            <div class="p-5">
 
                 <h3 class="text-xl font-bold mb-2">
 
@@ -352,7 +369,7 @@ use Illuminate\Support\Facades\Storage;
 <!-- ========================= -->
 
 <section id="partner"
-         class="max-w-7xl mx-auto px-6 py-20">
+         class="max-w-7xl mx-auto px-4 sm:px-6 py-14 md:py-20">
 
     <div class="text-center mb-14">
 
@@ -378,7 +395,7 @@ use Illuminate\Support\Facades\Storage;
 
                 <img src="{{ $partner->logo_url }}"
                      alt="{{ $partner->name }}"
-                     class="w-32 h-32 object-contain mb-4">
+                    class="w-20 h-20 md:w-32 md:h-32 object-contain mb-4">
 
                 <h3 class="font-bold text-lg text-center">
 
