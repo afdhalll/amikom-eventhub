@@ -1,36 +1,28 @@
 <?php
 
-namespace App\Http\Controllers;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-use App\Models\Event;
-use App\Models\Review;
-use Illuminate\Http\Request;
-
-class ReviewController extends Controller
+return new class extends Migration
 {
-    public function store(Request $request, Event $event)
+    public function up(): void
     {
-        $request->validate([
-            'rating' => 'required|integer|min:1|max:5',
-            'comment' => 'required|string|max:1000',
-        ]);
+        Schema::create('reviews', function (Blueprint $table) {
+            $table->id();
 
-        // Cegah user memberikan review lebih dari satu kali
-        $alreadyReviewed = Review::where('user_id', auth()->id())
-            ->where('event_id', $event->id)
-            ->exists();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('event_id')->constrained()->cascadeOnDelete();
 
-        if ($alreadyReviewed) {
-            return back()->with('error', 'Kamu sudah memberikan review untuk event ini.');
-        }
+            $table->integer('rating');
+            $table->text('comment');
 
-        Review::create([
-            'user_id' => auth()->id(),
-            'event_id' => $event->id,
-            'rating' => $request->rating,
-            'comment' => $request->comment,
-        ]);
-
-        return back()->with('success', 'Terima kasih! Review berhasil dikirim.');
+            $table->timestamps();
+        });
     }
-}
+
+    public function down(): void
+    {
+        Schema::dropIfExists('reviews');
+    }
+};
